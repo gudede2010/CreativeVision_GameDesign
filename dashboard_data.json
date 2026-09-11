@@ -1,0 +1,198 @@
+{
+  "schedule": {
+    "firstMeetingDate": "2026-09-09",
+    "meetingTime": "4:30-5:30 PM",
+    "timezone": "Asia/Shanghai"
+  },
+  "announcements": [
+    {
+      "date": "SEP 09",
+      "text": "First Creative Vision meeting."
+    }
+  ],
+  "weeks": [
+    {
+      "deadlines": [],
+      "meeting": {
+        "prepare": "Bring an example of a game you enjoy and be ready to explain its rules and goals.",
+        "time": "September 9, 2026 \u00b7 4:30-5:30 PM",
+        "topic": "Introduction: What is a game?"
+      },
+      "meetingDate": "2026-09-09",
+      "project": {
+        "explanation": "of the eight-week foundations phase complete.",
+        "percent": 13,
+        "title": "Design foundations"
+      },
+      "updates": [
+        {
+          "date": "SEP 09",
+          "text": "First Creative Vision meeting."
+        }
+      ],
+      "week": "Week 1",
+      "weekDisplay": {
+        "body": "See a game as a system of rules and goals.",
+        "status": "FOUNDATIONS",
+        "title": "What is a game?"
+      }
+    },
+    {
+      "deadlines": [],
+      "meeting": {
+        "prepare": "Choose a familiar game and identify the feeling it creates for players.",
+        "time": "September 16, 2026 \u00b7 4:30-5:30 PM",
+        "topic": "MDA framework"
+      },
+      "meetingDate": "2026-09-16",
+      "project": {
+        "explanation": "of the eight-week foundations phase complete.",
+        "percent": 25,
+        "title": "Design foundations"
+      },
+      "updates": [],
+      "week": "Week 2",
+      "weekDisplay": {
+        "body": "Reverse engineer the desired player feeling, then design the mechanisms that create it.",
+        "status": "PLAYER EXPERIENCE",
+        "title": "MDA framework"
+      }
+    },
+    {
+      "deadlines": [],
+      "meeting": {
+        "prepare": "Find the repeated action-and-response loop in one game.",
+        "time": "September 23, 2026 \u00b7 4:30-5:30 PM",
+        "topic": "Core loop & Feedback Loop"
+      },
+      "meetingDate": "2026-09-23",
+      "project": {
+        "explanation": "of the eight-week foundations phase complete.",
+        "percent": 38,
+        "title": "Design foundations"
+      },
+      "updates": [],
+      "week": "Week 3",
+      "weekDisplay": {
+        "body": "Understand how core loops and feedback loops keep play moving.",
+        "status": "SYSTEMS",
+        "title": "The heartbeat of a game"
+      }
+    },
+    {
+      "deadlines": [],
+      "meeting": {
+        "prepare": "Think of a moment when a game felt too easy, too hard, or just right.",
+        "time": "September 30, 2026 \u00b7 4:30-5:30 PM",
+        "topic": "Flow & Difficulty curves"
+      },
+      "meetingDate": "2026-09-30",
+      "project": {
+        "explanation": "of the eight-week foundations phase complete.",
+        "percent": 50,
+        "title": "Design foundations"
+      },
+      "updates": [],
+      "week": "Week 4",
+      "weekDisplay": {
+        "body": "Learn how to balance a player's skill with the game's challenge.",
+        "status": "BALANCE",
+        "title": "Flow & Difficulty curves"
+      }
+    },
+    {
+      "deadlines": [],
+      "meeting": {
+        "prepare": "Bring one example of a choice with meaningful risk and reward.",
+        "time": "October 7, 2026 \u00b7 4:30-5:30 PM",
+        "topic": "Tradeoff & Choice"
+      },
+      "meetingDate": "2026-10-07",
+      "project": {
+        "explanation": "of the eight-week foundations phase complete.",
+        "percent": 63,
+        "title": "Design foundations"
+      },
+      "updates": [],
+      "week": "Week 5",
+      "weekDisplay": {
+        "body": "Balance risk and reward to create questions with no single best answer.",
+        "status": "DECISIONS",
+        "title": "Tradeoff & Choice"
+      }
+    },
+    {
+      "deadlines": [],
+      "meeting": {
+        "prepare": "Find an example of a game showing its world without directly explaining it.",
+        "time": "October 14, 2026 \u00b7 4:30-5:30 PM",
+        "topic": "Narrative & Worldbuilding"
+      },
+      "meetingDate": "2026-10-14",
+      "project": {
+        "explanation": "of the eight-week foundations phase complete.",
+        "percent": 75,
+        "title": "Design foundations"
+      },
+      "updates": [],
+      "week": "Week 6",
+      "weekDisplay": {
+        "body": "Learn to show, not tell.",
+        "status": "STORY",
+        "title": "Narrative & Worldbuilding"
+      }
+    },
+    {
+      "deadlines": [
+        {
+          "date": "Oct 21",
+          "title": "Form a project group"
+        }
+      ],
+      "meeting": {
+        "prepare": "Come ready to form a project group and discuss possible game concepts.",
+        "time": "October 21, 2026 \u00b7 4:30-5:30 PM",
+        "topic": "The GDD (Game Design Document)"
+      },
+      "meetingDate": "2026-10-21",
+      "project": {
+        "explanation": "of the eight-week foundations phase complete.",
+        "percent": 88,
+        "title": "Design foundations"
+      },
+      "updates": [],
+      "week": "Week 7",
+      "weekDisplay": {
+        "body": "Form project groups and learn why a clear GDD matters.",
+        "status": "PRE-PRODUCTION",
+        "title": "The Game Design Document"
+      }
+    },
+    {
+      "deadlines": [
+        {
+          "date": "Oct 28",
+          "title": "Present revised GDD"
+        }
+      ],
+      "meeting": {
+        "prepare": "Bring your team's GDD and a concise presentation of the game concept.",
+        "time": "October 28, 2026 \u00b7 4:30-5:30 PM",
+        "topic": "GDD presentation"
+      },
+      "meetingDate": "2026-10-28",
+      "project": {
+        "explanation": "of the eight-week foundations phase complete.",
+        "percent": 100,
+        "title": "Design foundations"
+      },
+      "updates": [],
+      "week": "Week 8",
+      "weekDisplay": {
+        "body": "Present the GDD, receive feedback, revise it, and gain approval.",
+        "status": "PROJECT APPROVAL",
+        "title": "GDD presentation"
+      }
+    }
+  ]
+}

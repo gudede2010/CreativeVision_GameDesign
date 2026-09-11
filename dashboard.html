@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard | Creative Vision</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <header class="homebar">
+      <div class="wrap homebar-inner">
+        <a class="brand" href="index.html">CREATIVE VISION</a>
+        <nav class="home-links">
+          <a href="index.html">Home</a
+          ><a href="dashboard.html" aria-current="page">Dashboard</a
+          ><a href="resource.html">Resources</a
+          ><a href="gallery.html">Gallery</a><a href="aboutus.html">About Us</a>
+        </nav>
+      </div>
+    </header>
+    <div class="page-label">
+      <div class="wrap page-label-inner">
+        <span>BIHZ / MEMBER DASHBOARD / WEEKLY SPACE</span>
+        <div class="account" id="dashboardAccount" hidden>
+          <div class="account-trigger">
+            <strong id="accountName"></strong><span id="accountRole"></span>
+            <div class="account-menu"><a href="change-password.html">Change password</a></div>
+          </div>
+          <button class="signout" id="signout">↪</button>
+        </div>
+      </div>
+    </div>
+    <main class="wrap">
+      <section id="loginView" class="login-shell">
+        <div>
+          <small>01 / MEMBER SPACE</small>
+          <h1>Enter the<br />studio.</h1>
+          <p class="intro">
+            Weekly meeting plans, deadlines, team progress, and announcements
+            for Creative Vision members.
+          </p>
+        </div>
+        <form class="login-panel" id="loginForm">
+          <small>SECURE ACCESS</small>
+          <div class="login-title">
+            <h2 id="formTitle">Member login</h2>
+            <button class="register-link" type="button" id="registerToggle">
+              Register
+            </button>
+          </div>
+          <p>Use your approved BIHZ account.</p>
+          <label for="email">Email</label
+          ><input id="email" type="email" required /><label for="password"
+            >Password</label
+          ><input id="password" type="password" required />
+          <label id="confirmPasswordLabel" for="confirmPassword" hidden>Confirm password</label>
+          <input id="confirmPassword" type="password" hidden />
+          <button class="signin" id="submitButton">Sign in</button>
+          <div id="formMessage" class="form-message" role="status"></div>
+          <div class="divider mono">PROTOTYPE ACCESS</div>
+          <div class="role-buttons">
+            <button class="role-button" type="button" data-role="student">
+              Student</button
+            ><button class="role-button" type="button" data-role="leader">
+              Leader</button
+            ><button class="role-button" type="button" data-role="admin">
+              Admin
+            </button>
+          </div>
+        </form>
+      </section>
+      <section id="dashboardView" hidden>
+        <div class="dashboard-head">
+          <div>
+            <small>MEMBER SPACE / AUTHORIZED</small>
+            <h1 id="dashboardTitle">Welcome back.</h1>
+            <p class="intro" id="weekContext"></p>
+          </div>
+        </div>
+        <div id="cards"></div>
+      </section>
+    </main>
+    <script src="dashboard.js"></script>
+  </body>
+</html>

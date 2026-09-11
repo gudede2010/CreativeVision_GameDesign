@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resources | Creative Vision</title>
+    <link rel="stylesheet" href="resource.css" />
+  </head>
+  <body>
+    <header class="homebar">
+      <div class="wrap homebar-inner">
+        <a class="brand" href="index.html">CREATIVE VISION</a>
+        <nav class="home-links">
+          <a href="index.html">Home</a><a href="dashboard.html">Dashboard</a
+          ><a href="resource.html" aria-current="page">Resources</a
+          ><a href="gallery.html">Gallery</a><a href="aboutus.html">About Us</a>
+        </nav>
+      </div>
+    </header>
+    <div class="page-label">
+      <div class="wrap page-label-inner">
+        <span>BIHZ / STUDIO LIBRARY / MEMBER ACCESS</span>
+        <div class="account" id="resourceAccount" hidden>
+          <div>
+            <strong id="resourceAccountName">Member</strong
+            ><span id="resourceAccountRole">Account</span>
+          </div>
+          <button class="signout" id="resourceSignout">↪</button>
+        </div>
+      </div>
+    </div>
+    <main class="wrap">
+      <section id="accessMessage" class="access-message" hidden>
+        <small>MEMBER ACCESS REQUIRED</small>
+        <h1>Sign in to<br />the library.</h1>
+        <p>
+          Videos, slides, and references are available to Creative Vision
+          members.
+        </p>
+        <a class="button" href="dashboard.html">Go to Dashboard</a>
+      </section>
+      <section id="resourceContent" hidden>
+        <small>01 / STUDIO LIBRARY</small>
+        <h1>Resources</h1>
+        <p class="intro">
+          A growing library of lessons and references for turning a game idea
+          into a playable experience.
+        </p>
+        <div class="resource-list" id="resourceList"></div>
+      </section>
+    </main>
+    <script src="resource.js"></script>
+  </body>
+</html>

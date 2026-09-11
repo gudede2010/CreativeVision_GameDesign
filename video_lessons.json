@@ -1,0 +1,28 @@
+{
+  "lessons": [
+    {
+      "lesson": "Lesson 01",
+      "objective": "See a game as a system of rules and goals.",
+      "title": "What is a game?",
+      "url": "https://youtu.be/QPqR2wOs8WI?si=EmWSTV_rVRXWPRIh"
+    },
+    {
+      "lesson": "Lesson 02",
+      "objective": "Reverse engineer a feeling and design the mechanisms behind it.",
+      "title": "MDA framework",
+      "url": "https://youtu.be/iIOIT3dCy5w?si=LPtPy8F4BqCD9ZN0"
+    },
+    {
+      "lesson": "Lesson 03",
+      "objective": "Learn the heartbeat of a game through feedback loops.",
+      "title": "Feedback loops",
+      "url": "https://youtu.be/H4kbJObhcHw?si=EiI6edDC1lHW75YL"
+    },
+    {
+      "lesson": "Lesson 04",
+      "objective": "Balance player skill and challenge with flow and difficulty curves.",
+      "title": "Flow and difficulty",
+      "url": "https://youtu.be/hbzGO_Qonu0?si=VsCzmcpqGHnkE4CE"
+    }
+  ]
+}
