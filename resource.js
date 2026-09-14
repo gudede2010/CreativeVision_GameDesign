@@ -18,6 +18,10 @@ async function checkSession() {
         window.location.reload();
       };
     }
+    if (!authenticated) {
+      window.location.href = "login.html?next=resource.html";
+      return;
+    }
     accessMessage.hidden = authenticated;
     resourceContent.hidden = !authenticated;
     if (authenticated) {

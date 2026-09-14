@@ -37,9 +37,10 @@ def register():
     data = request.get_json(silent=True) or {}
     email = str(data.get("email", "")).strip().lower()
     password = str(data.get("password", ""))
+    confirm_password = str(data.get("confirmPassword", password))
     if not re.fullmatch(r"[^@\s]+@basischina\.com", email):
         return jsonify(error="Use a valid @basischina.com email address."), 400
-    if len(password) < 8:
+    if len(password) < 8 or password != confirm_password:
         return jsonify(error="Password must be at least 8 characters."), 400
     try:
         with db() as connection:

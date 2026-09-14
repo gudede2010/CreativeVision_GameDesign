@@ -312,19 +312,21 @@
 
   <script>
     const languageButtons = document.querySelectorAll('[data-lang]');
-    languageButtons.forEach(button => button.addEventListener('click', () => {
-      const language = button.dataset.lang;
+    function setLanguage(language) {
       document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
       document.querySelectorAll('[data-en][data-zh]').forEach(element => {
         element.textContent = element.dataset[language];
       });
       languageButtons.forEach(item => {
-        const active = item === button;
+        const active = item.dataset.lang === language;
         item.classList.toggle('active', active);
         item.setAttribute('aria-pressed', String(active));
       });
       document.title = language === 'zh' ? 'Creative Vision | BIHZ 游戏设计社' : 'Creative Vision | BIHZ Game Design Club';
-    }));
+      localStorage.setItem('creativeVisionLanguage', language);
+    }
+    languageButtons.forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
+    setLanguage(localStorage.getItem('creativeVisionLanguage') || 'en');
 
     const revealObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {

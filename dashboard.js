@@ -1,7 +1,6 @@
 const state = { role: "student", data: null, currentWeek: null };
 const $ = (s) => document.querySelector(s);
-const loginView = $("#loginView"),
-  dashboardView = $("#dashboardView");
+const dashboardView = $("#dashboardView");
 function card(key, html, primary = "") {
   return `<article class="card ${primary}" data-key="${key}"><button class="edit-card" hidden>Edit</button>${html}</article>`;
 }
@@ -163,7 +162,6 @@ async function enter(role, createSession = true) {
       body: JSON.stringify({ role }),
     }).catch(() => {});
   }
-  loginView.hidden = true;
   dashboardView.hidden = false;
   $("#dashboardAccount").hidden = false;
   $("#accountName").textContent =
@@ -184,49 +182,16 @@ async function restoreSession() {
   try {
     const response = await fetch("/api/session");
     const saved = await response.json();
-    if (saved.authenticated) {
-      await enter(saved.role, false);
-    }
+    if (!saved.authenticated) window.location.href = "login.html?next=dashboard.html";
+    else await enter(saved.role, false);
   } catch (error) {
     console.warn("Session restore unavailable", error);
   }
 }
-document
-  .querySelectorAll("[data-role]")
-  .forEach((b) => (b.onclick = () => enter(b.dataset.role)));
-let registrationMode = false;
-$("#registerToggle").onclick = () => {
-  registrationMode = !registrationMode;
-  $("#formTitle").textContent = registrationMode ? "Create account" : "Member login";
-  $("#submitButton").textContent = registrationMode ? "Register" : "Sign in";
-  $("#registerToggle").textContent = registrationMode ? "Back to login" : "Register";
-  $("#password").hidden = false;
-  $("#password").required = true;
-  $("#confirmPasswordLabel").hidden = !registrationMode;
-  $("#confirmPassword").hidden = !registrationMode;
-  $("#confirmPassword").required = registrationMode;
-  $("#formMessage").textContent = "";
-};
-$("#loginForm").onsubmit = async (e) => {
-  e.preventDefault();
-  const email = $("#email").value.trim();
-  const password = $("#password").value;
-  const message = $("#formMessage");
-  const endpoint = registrationMode ? "/api/register" : "/api/login";
-  const response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
-  const data = await response.json();
-  if (!response.ok) { message.textContent = data.error || "Request failed."; return; }
-  if (registrationMode) {
-    message.textContent = "Account created. You can now sign in.";
-    $("#registerToggle").click();
-    return;
-  }
-  await enter(data.role, false);
-};
 $("#signout").onclick = () => {
   fetch("/api/logout", { method: "POST" }).catch(() => {});
   $("#dashboardAccount").hidden = true;
   dashboardView.hidden = true;
-  loginView.hidden = false;
+  window.location.href = "login.html?next=dashboard.html";
 };
 restoreSession();
