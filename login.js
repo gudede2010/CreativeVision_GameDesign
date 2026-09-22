@@ -1,4 +1,15 @@
 const query = new URLSearchParams(window.location.search);
+const supabaseReady = new Promise((resolve) => {
+  const supabaseScript = document.createElement("script");
+  supabaseScript.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+  supabaseScript.onload = () => {
+    const clientScript = document.createElement("script");
+    clientScript.src = "supabase-client.js";
+    clientScript.onload = resolve;
+    document.head.appendChild(clientScript);
+  };
+  document.head.appendChild(supabaseScript);
+});
 const nextPage = query.get("next") === "resource.html" ? "resource.html" : "dashboard.html";
 const $ = (selector) => document.querySelector(selector);
 const languageButtons = document.querySelectorAll("[data-lang]");
@@ -30,15 +41,21 @@ $("#registerToggle").onclick = () => {
 };
 $("#loginForm").onsubmit = async (event) => {
   event.preventDefault();
+  await supabaseReady;
   const email = $("#email").value.trim();
   const password = $("#password").value;
-  const endpoint = registrationMode ? "/api/register" : "/api/login";
-  const payload = { email, password };
-  if (registrationMode) payload.confirmPassword = $("#confirmPassword").value;
-  const response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-  const data = await response.json();
-  if (!response.ok) { $("#formMessage").textContent = data.error || "Request failed."; return; }
-  if (registrationMode) { $("#formMessage").textContent = "Account created. You can now sign in."; $("#registerToggle").click(); return; }
+  if (registrationMode) {
+    if (password !== $("#confirmPassword").value) {
+      $("#formMessage").textContent = "Passwords must match.";
+      return;
+    }
+    const { error } = await supabaseClient.auth.signUp({ email, password });
+    if (error) { $("#formMessage").textContent = error.message; return; }
+    $("#formMessage").textContent = "Account created. You can now sign in.";
+    $("#registerToggle").click();
+    return;
+  }
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (error) { $("#formMessage").textContent = error.message; return; }
   window.location.href = nextPage;
 };
-document.querySelectorAll("[data-role]").forEach((button) => { button.onclick = async () => { await fetch("/api/demo-login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role: button.dataset.role }) }); window.location.href = nextPage; }; });

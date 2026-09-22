@@ -2,19 +2,19 @@ async function checkSession() {
   const accessMessage = document.querySelector("#accessMessage");
   const resourceContent = document.querySelector("#resourceContent");
   try {
-    const response = await fetch("/api/session");
-    const session = await response.json();
-    const authenticated = session.authenticated === true;
+    const { data: sessionData } = await supabaseClient.auth.getSession();
+    const authenticated = Boolean(sessionData.session);
     document.querySelector("#resourceAccount").hidden = !authenticated;
     if (authenticated) {
       const account = document.querySelector("#resourceAccount");
       account.hidden = false;
-      document.querySelector("#resourceAccountName").textContent =
-        session.email;
+      const user = sessionData.session.user;
+      const { data: profile } = await supabaseClient.from("profiles").select("role").eq("id", user.id).single();
+      document.querySelector("#resourceAccountName").textContent = user.email;
       document.querySelector("#resourceAccountRole").textContent =
-        `${session.role} account`;
+        `${profile?.role || "student"} account`;
       document.querySelector("#resourceSignout").onclick = async () => {
-        await fetch("/api/logout", { method: "POST" });
+        await supabaseClient.auth.signOut();
         window.location.reload();
       };
     }
@@ -34,9 +34,9 @@ async function checkSession() {
 }
 
 async function renderResources() {
-  const videoData = await fetch("video_lessons.json").then((response) =>
-    response.json(),
-  );
+  const { data: resourceData, error } = await supabaseClient.from("resources").select("*").eq("published", true).order("sort_order");
+  if (error) throw error;
+  const videoData = { lessons: resourceData.filter((item) => item.resource_type === "video").map((item) => ({ lesson: item.lesson, objective: item.objective, title: item.title, url: item.url })) };
   const sections = [
     {
       title: "Video lessons",
@@ -50,36 +50,14 @@ async function renderResources() {
       description:
         "Downloadable decks for MDA, flow, choice, narrative, and the GDD.",
       type: "slides",
-      items: [
-        {
-          lesson: "Lesson 01",
-          objective: "Game design foundations.",
-          title: "Foundations slides",
-        },
-        {
-          lesson: "Lesson 02",
-          objective: "Turn an idea into a structured GDD.",
-          title: "GDD presentation guide",
-        },
-      ],
+      items: resourceData.filter((item) => item.resource_type === "slide"),
     },
     {
       title: "References",
       description:
         "Selected examples, tools, and prompts for independent exploration.",
       type: "reference",
-      items: [
-        {
-          lesson: "Reference 01",
-          objective: "Study how games communicate feedback.",
-          title: "Game feel reference shelf",
-        },
-        {
-          lesson: "Reference 02",
-          objective: "Prepare a focused prototype for playtesting.",
-          title: "Prototype checklist",
-        },
-      ],
+      items: resourceData.filter((item) => item.resource_type === "reference"),
     },
   ];
   document.querySelector("#resourceList").innerHTML = sections

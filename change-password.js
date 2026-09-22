@@ -2,8 +2,21 @@ const form = document.querySelector('#changeForm');
 const message = document.querySelector('#formMessage');
 form.onsubmit = async (event) => {
   event.preventDefault();
-  const response = await fetch('/api/password/change', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword: document.querySelector('#currentPassword').value, password: document.querySelector('#newPassword').value, confirmPassword: document.querySelector('#confirmPassword').value }) });
-  const data = await response.json();
-  message.textContent = data.message || data.error;
-  if (response.ok) form.reset();
+  const currentPassword = document.querySelector('#currentPassword').value;
+  const password = document.querySelector('#newPassword').value;
+  const confirmPassword = document.querySelector('#confirmPassword').value;
+  if (password.length < 8 || password !== confirmPassword) {
+    message.textContent = 'Passwords must match and be at least 8 characters.';
+    return;
+  }
+  const { data: sessionData } = await supabaseClient.auth.getSession();
+  const email = sessionData.session?.user?.email;
+  const { error: loginError } = await supabaseClient.auth.signInWithPassword({ email, password: currentPassword });
+  if (loginError) {
+    message.textContent = 'Current password is incorrect.';
+    return;
+  }
+  const { error } = await supabaseClient.auth.updateUser({ password });
+  message.textContent = error ? error.message : 'Password changed.';
+  if (!error) form.reset();
 };

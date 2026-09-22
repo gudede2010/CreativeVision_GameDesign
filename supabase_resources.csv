@@ -1,0 +1,5 @@
+resource_type,lesson,objective,title,url,storage_path,published,sort_order
+video,Lesson 01,See a game as a system of rules and goals.,What is a game?,https://youtu.be/QPqR2wOs8WI?si=EmWSTV_rVRXWPRIh,,true,0
+video,Lesson 02,Reverse engineer a feeling and design the mechanisms behind it.,MDA framework,https://youtu.be/iIOIT3dCy5w?si=LPtPy8F4BqCD9ZN0,,true,1
+video,Lesson 03,Learn the heartbeat of a game through feedback loops.,Feedback loops,https://youtu.be/H4kbJObhcHw?si=EiI6edDC1lHW75YL,,true,2
+video,Lesson 04,Balance player skill and challenge with flow and difficulty curves.,Flow and difficulty,https://youtu.be/hbzGO_Qonu0?si=VsCzmcpqGHnkE4CE,,true,3

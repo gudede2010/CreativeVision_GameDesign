@@ -4,6 +4,9 @@ import re
 import secrets
 import sqlite3
 import json
+import os
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 from datetime import timedelta
 from flask import Flask, jsonify, request, send_from_directory, session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -15,6 +18,21 @@ app.secret_key = secrets.token_hex(32)
 app.permanent_session_lifetime = timedelta(days=30)
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+def supabase_get(table, query=""):
+    base = os.getenv("SUPABASE_URL", "").rstrip("/")
+    key = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+    if not base or not key:
+        raise RuntimeError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required")
+    url = f"{base}/rest/v1/{table}"
+    if query:
+        url += f"?{query}"
+    request = Request(url, headers={"apikey": key, "Authorization": f"Bearer {key}"})
+    try:
+        with urlopen(request, timeout=20) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except (HTTPError, URLError) as error:
+        raise RuntimeError(f"Supabase request failed: {error}") from error
 
 def db():
     connection = sqlite3.connect(DB_PATH)
@@ -116,26 +134,23 @@ def current_session():
 
 @app.get("/api/dashboard")
 def dashboard_data():
-    return jsonify(json.loads((ROOT / "dashboard_data.json").read_text()))
+    try:
+        weeks = supabase_get("weeks", "select=*&order=week_number.asc")
+        deadlines = supabase_get("deadlines", "select=*&order=sort_order.asc")
+        announcements = supabase_get("announcements", "select=*&order=created_at.asc")
+    except RuntimeError as error:
+        return jsonify(error=str(error)), 503
+    deadlines_by_week = {}
+    for deadline in deadlines:
+        deadlines_by_week.setdefault(deadline["week_id"], []).append({"title": deadline["title"], "date": deadline["deadline_date"]})
+    result = {"schedule": {"timezone": "Asia/Shanghai"}, "announcements": [{"date": item["announcement_date"], "text": item["text"]} for item in announcements], "weeks": []}
+    for week in weeks:
+        result["weeks"].append({"week": f"Week {week['week_number']}", "meetingDate": week["meeting_date"], "meeting": {"time": week["meeting_time"], "topic": week["topic"], "prepare": week["preparation"]}, "deadlines": deadlines_by_week.get(week["id"], []), "weekDisplay": {"title": week["week_title"], "body": week["week_body"], "status": week["week_status"]}, "project": {"title": week["project_title"], "percent": week["project_percent"], "explanation": week["project_explanation"]}})
+    return jsonify(result)
 
 @app.post("/api/dashboard")
 def save_dashboard_data():
-    if "user_email" not in session:
-        return jsonify(error="Login required."), 401
-    session_role = session.get("demo_role")
-    if session_role in ("admin", "leader"):
-        role = session_role
-    else:
-        with db() as connection:
-            user = connection.execute("SELECT role FROM users WHERE email = ?", (session["user_email"],)).fetchone()
-        role = user["role"] if user else None
-    if role not in ("admin", "leader"):
-        return jsonify(error="Leader or admin access required."), 403
-    payload = request.get_json(silent=True)
-    if not isinstance(payload, dict) or not isinstance(payload.get("weeks"), list):
-        return jsonify(error="Invalid dashboard data."), 400
-    (ROOT / "dashboard_data.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    return jsonify(message="Dashboard saved.")
+    return jsonify(error="Dashboard editing is disabled. Edit content in Supabase Table Editor."), 403
 
 @app.get("/")
 def home():
