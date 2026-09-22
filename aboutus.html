@@ -1,2 +1,314 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About Us | Creative Vision</title><style>:root{--bg:#07090b;--panel:#111719;--line:#2a3539;--text:#f1f5f2;--muted:#9aa7a5;--cyan:#54e7ee;--lime:#c8ff36}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui}.wrap{width:min(calc(100% - 40px),1100px);margin:auto}a{color:var(--cyan);text-decoration:none}.homebar{height:72px;border-bottom:1px solid var(--line);background:#101417}.homebar-inner{height:100%;display:flex;justify-content:flex-end;align-items:center}.home-links{display:flex;gap:24px}.language-dock{position:fixed;top:18px;left:22px;z-index:3}.lang-toggle{display:flex;border:1px solid var(--line);padding:3px;background:var(--panel)}.lang-toggle button{border:0;min-width:40px;height:30px;color:var(--muted);background:transparent}.lang-toggle button.active{background:var(--text);color:var(--bg)}main{padding:70px 0}h1{font-size:clamp(44px,8vw,92px);line-height:.9}.intro{max-width:720px;color:var(--muted);font-size:20px;line-height:1.5}.section{margin-top:65px}.section h2{border-bottom:1px solid var(--line);padding-bottom:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.panel{background:var(--panel);border:1px solid var(--line);padding:25px}.panel p{color:var(--muted);line-height:1.6}.panel h3{margin-top:35px}.contact strong{color:var(--lime)}@media(max-width:760px){.wrap{width:calc(100% - 28px)}.home-links{gap:12px;font-size:12px;white-space:nowrap;overflow:auto}.grid{grid-template-columns:1fr}.homebar{height:62px}}
-</style></head><body><div class="language-dock"><div class="lang-toggle"><button data-lang="en">EN</button><button data-lang="zh">中</button></div></div><header class="homebar"><div class="wrap homebar-inner"><nav class="home-links"><a href="index.html">Home</a><a href="dashboard.html">Dashboard</a><a href="resource.html">Resources</a><a href="gallery.html">Gallery</a><a href="aboutus.html">About Us</a></nav></div></header><main class="wrap"><small data-en="04 / STUDIO" data-zh="04 / 工作室">04 / STUDIO</small><h1 data-en="Ideas into playable worlds." data-zh="把想法变成可玩的世界。">Ideas into playable worlds.</h1><p class="intro" data-en="Creative Vision is a BIHZ game design club exploring how an idea can become a polished, playable experience." data-zh="Creative Vision 是 BIHZ 的游戏设计社团，探索如何把一个游戏想法变成完整、可玩的作品。">Creative Vision is a BIHZ game design club exploring how an idea can become a polished, playable experience.</p><section class="section"><h2 data-en="Our approach / Lecture + Project" data-zh="我们的方式 / 讲授 + 项目">Our approach / Lecture + Project</h2><div class="grid" style="grid-template-columns:repeat(2,1fr)"><article class="panel"><h3 data-en="Build the toolkit" data-zh="建立工具箱">Build the toolkit</h3><p data-en="We learn game design foundations, then build a shared designer’s toolkit." data-zh="我们学习游戏设计基础，建立共同的设计工具箱。">We learn game design foundations, then build a shared designer’s toolkit.</p></article><article class="panel"><h3 data-en="Make it real" data-zh="把创意变成现实">Make it real</h3><p data-en="Students use Roblox, Unity, and AI-assisted tools to develop and polish their own games." data-zh="成员使用 Roblox、Unity 和 AI 工具制作并打磨自己的游戏。">Students use Roblox, Unity, and AI-assisted tools to develop and polish their own games.</p></article></div></section><section class="section"><h2 data-en="The people behind the club / Team" data-zh="社团团队 / 团队成员">The people behind the club / Team</h2><div class="grid"><article class="panel"><small>Lead instructor · 主讲老师</small><h3>Dede</h3><p data-en="Unity and game design fundamentals." data-zh="Unity 与游戏设计基础。">Unity and game design fundamentals.</p></article><article class="panel"><small>Leader · 社团负责人</small><h3>Kerry</h3><p data-en="Roblox game maker; Hackathon first-place winner." data-zh="Roblox 游戏制作者；Hackathon 第一名。">Roblox game maker; Hackathon first-place winner.</p></article><article class="panel"><small>Leader · 社团负责人</small><h3>Leo</h3><p data-en="AI expert, vibe coder, and technical support." data-zh="AI 专家、vibe coder 和技术支持。">AI expert, vibe coder, and technical support.</p></article><article class="panel"><small>Teacher advisor · 指导老师</small><h3>Mr Newton</h3><p data-en="BIHZ CS teacher supporting the club." data-zh="BIHZ 计算机科学老师，为社团提供指导。">BIHZ CS teacher supporting the club.</p></article></div></section><section class="section panel contact"><h2 data-en="Interested?" data-zh="对社团感兴趣？">Interested?</h2><p data-en="Contact Gu Dede in a Teams chat in Basis China." data-zh="请在 Basis China 的 Teams 中联系 Gu Dede。">Contact <strong>Gu Dede</strong> in a Teams chat in Basis China.</p></section></main><script>const buttons=document.querySelectorAll('[data-lang]'),elements=document.querySelectorAll('[data-en][data-zh]');function setLanguage(language){document.documentElement.lang=language==='zh'?'zh-CN':'en';elements.forEach(e=>e.textContent=e.dataset[language]);buttons.forEach(b=>b.classList.toggle('active',b.dataset.lang===language));localStorage.setItem('creativeVisionLanguage',language)}buttons.forEach(b=>b.onclick=()=>setLanguage(b.dataset.lang));setLanguage(localStorage.getItem('creativeVisionLanguage')||'en');</script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About Us | Creative Vision</title>
+    <style>
+      :root {
+        --bg: #07090b;
+        --panel: #111719;
+        --line: #2a3539;
+        --text: #f1f5f2;
+        --muted: #9aa7a5;
+        --cyan: #54e7ee;
+        --lime: #c8ff36;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px system-ui;
+      }
+
+      .wrap {
+        width: min(calc(100% - 40px), 1100px);
+        margin: auto;
+      }
+
+      a {
+        color: var(--cyan);
+        text-decoration: none;
+      }
+
+      .homebar {
+        height: 72px;
+        border-bottom: 1px solid var(--line);
+        background: #101417;
+      }
+
+      .homebar-inner {
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+
+      .home-links {
+        display: flex;
+        gap: 24px;
+      }
+
+      .language-dock {
+        position: fixed;
+        top: 18px;
+        left: 22px;
+        z-index: 3;
+      }
+
+      .lang-toggle {
+        display: flex;
+        border: 1px solid var(--line);
+        padding: 3px;
+        background: var(--panel);
+      }
+
+      .lang-toggle button {
+        border: 0;
+        min-width: 40px;
+        height: 30px;
+        color: var(--muted);
+        background: transparent;
+      }
+
+      .lang-toggle button.active {
+        background: var(--text);
+        color: var(--bg);
+      }
+
+      main {
+        padding: 70px 0;
+      }
+
+      h1 {
+        font-size: clamp(44px, 8vw, 92px);
+        line-height: 0.9;
+      }
+
+      .intro {
+        max-width: 720px;
+        color: var(--muted);
+        font-size: 20px;
+        line-height: 1.5;
+      }
+
+      .section {
+        margin-top: 65px;
+      }
+
+      .section h2 {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        padding: 25px;
+      }
+
+      .panel p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .panel h3 {
+        margin-top: 35px;
+      }
+
+      .contact strong {
+        color: var(--lime);
+      }
+
+      @media (max-width: 760px) {
+        .wrap {
+          width: calc(100% - 28px);
+        }
+
+        .home-links {
+          gap: 12px;
+          font-size: 12px;
+          white-space: nowrap;
+          overflow: auto;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .homebar {
+          height: 62px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="language-dock">
+      <div class="lang-toggle">
+        <button data-lang="en">EN</button>
+        <button data-lang="zh">中</button>
+      </div>
+    </div>
+
+    <header class="homebar">
+      <div class="wrap homebar-inner">
+        <nav class="home-links">
+          <a href="index.html">Home</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="resource.html">Resources</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="aboutus.html">About Us</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <small data-en="04 / STUDIO" data-zh="04 / 工作室">04 / STUDIO</small>
+      <h1
+        data-en="Ideas into playable worlds."
+        data-zh="把想法变成可玩的世界。"
+      >
+        Ideas into playable worlds.
+      </h1>
+      <p
+        class="intro"
+        data-en="Creative Vision is a BIHZ game design club exploring how an idea can become a polished, playable experience."
+        data-zh="Creative Vision 是 BIHZ 的游戏设计社团，探索如何把一个游戏想法变成完整、可玩的作品。"
+      >
+        Creative Vision is a BIHZ game design club exploring how an idea can
+        become a polished, playable experience.
+      </p>
+
+      <section class="section">
+        <h2
+          data-en="Our approach / Lecture + Project"
+          data-zh="我们的方式 / 讲授 + 项目"
+        >
+          Our approach / Lecture + Project
+        </h2>
+        <div class="grid" style="grid-template-columns: repeat(2, 1fr)">
+          <article class="panel">
+            <h3 data-en="Build the toolkit" data-zh="建立工具箱">
+              Build the toolkit
+            </h3>
+            <p
+              data-en="We learn game design foundations, then build a shared designer’s toolkit."
+              data-zh="我们学习游戏设计基础，建立共同的设计工具箱。"
+            >
+              We learn game design foundations, then build a shared designer’s
+              toolkit.
+            </p>
+          </article>
+          <article class="panel">
+            <h3 data-en="Make it real" data-zh="把创意变成现实">
+              Make it real
+            </h3>
+            <p
+              data-en="Students use Roblox, Unity, and AI-assisted tools to develop and polish their own games."
+              data-zh="成员使用 Roblox、Unity 和 AI 工具制作并打磨自己的游戏。"
+            >
+              Students use Roblox, Unity, and AI-assisted tools to develop and
+              polish their own games.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2
+          data-en="The people behind the club / Team"
+          data-zh="社团团队 / 团队成员"
+        >
+          The people behind the club / Team
+        </h2>
+        <div class="grid">
+          <article class="panel">
+            <small data-en="Leader" data-zh="社团负责人">Leader</small>
+            <h3>Dede</h3>
+            <p
+              data-en="Unity and game design fundamentals."
+              data-zh="Unity 与游戏设计基础。"
+            >
+              Unity and game design fundamentals.
+            </p>
+          </article>
+          <article class="panel">
+            <small data-en="Leader" data-zh="社团负责人">Leader</small>
+            <h3>Kerry</h3>
+            <p
+              data-en="Roblox game maker; Hackathon first-place winner."
+              data-zh="Roblox 游戏制作者；Hackathon 第一名。"
+            >
+              Roblox game maker; Hackathon first-place winner.
+            </p>
+          </article>
+          <article class="panel">
+            <small data-en="Leader" data-zh="社团负责人">Leader</small>
+            <h3>Leo</h3>
+            <p
+              data-en="AI expert, vibe coder, and technical support."
+              data-zh="AI 专家、vibe coder 和技术支持。"
+            >
+              AI expert, vibe coder, and technical support.
+            </p>
+          </article>
+          <article class="panel">
+            <small data-en="Teacher advisor" data-zh="指导老师">
+              Teacher advisor
+            </small>
+            <h3>Mr Newton</h3>
+            <p
+              data-en="BIHZ CS teacher supporting the club."
+              data-zh="BIHZ 计算机科学老师，为社团提供指导。"
+            >
+              BIHZ CS teacher supporting the club.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section panel contact">
+        <h2 data-en="Interested?" data-zh="对社团感兴趣？">Interested?</h2>
+        <p
+          data-en="Contact Gu Dede in a Teams chat in Basis China."
+          data-zh="请在 Basis China 的 Teams 中联系 Gu Dede。"
+        >
+          Contact <strong>Gu Dede</strong> in a Teams chat in Basis China.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const buttons = document.querySelectorAll("[data-lang]");
+      const elements = document.querySelectorAll("[data-en][data-zh]");
+
+      function setLanguage(language) {
+        document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+        elements.forEach((element) => {
+          element.textContent = element.dataset[language];
+        });
+        buttons.forEach((button) => {
+          button.classList.toggle("active", button.dataset.lang === language);
+        });
+        localStorage.setItem("creativeVisionLanguage", language);
+      }
+
+      buttons.forEach((button) => {
+        button.onclick = () => setLanguage(button.dataset.lang);
+      });
+
+      setLanguage(localStorage.getItem("creativeVisionLanguage") || "en");
+    </script>
+  </body>
+</html>

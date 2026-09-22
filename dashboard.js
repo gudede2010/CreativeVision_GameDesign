@@ -66,16 +66,13 @@ function render() {
       "wide",
     );
 }
-async function enter(role, createSession = true) {
+async function enter(user, profile) {
+  const role = profile?.role || "student";
+  const email = user?.email || profile?.email || "Member";
   state.role = role;
   dashboardView.hidden = false;
   $("#dashboardAccount").hidden = false;
-  $("#accountName").textContent =
-    role === "admin"
-      ? "Club Administrator"
-      : role === "leader"
-        ? "Demo Team Leader"
-        : "Demo Student";
+  $("#accountName").textContent = email;
   $("#accountRole").textContent =
     role[0].toUpperCase() + role.slice(1) + " account";
   const [weeksResult, deadlinesResult, announcementsResult] = await Promise.all([
@@ -104,15 +101,25 @@ async function enter(role, createSession = true) {
 }
 async function restoreSession() {
   try {
-    const { data } = await supabaseClient.auth.getSession();
+    const { data, error: sessionError } = await supabaseClient.auth.getSession();
+    if (sessionError) throw sessionError;
     if (!data.session) {
       window.location.href = "login.html?next=dashboard.html";
       return;
     }
-    const { data: profile } = await supabaseClient.from("profiles").select("role,email").eq("id", data.session.user.id).single();
-    await enter(profile?.role || "student", false);
+    const { data: profile, error: profileError } = await supabaseClient
+      .from("profiles")
+      .select("role,email")
+      .eq("id", data.session.user.id)
+      .maybeSingle();
+    if (profileError) {
+      console.warn("Profile lookup unavailable", profileError);
+    }
+    await enter(data.session.user, profile);
   } catch (error) {
-    console.warn("Session restore unavailable", error);
+    console.error("Session restore unavailable", error);
+    $("#dashboardView").hidden = true;
+    $("#dashboardAccount").hidden = true;
   }
 }
 $("#signout").onclick = () => {
