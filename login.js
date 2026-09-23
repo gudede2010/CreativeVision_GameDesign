@@ -45,6 +45,10 @@ $("#loginForm").onsubmit = async (event) => {
   const email = $("#email").value.trim();
   const password = $("#password").value;
   if (registrationMode) {
+    if (!email.toLowerCase().endsWith("@basischina.com")) {
+      $("#formMessage").textContent = "Please use your @basischina.com email address.";
+      return;
+    }
     if (password !== $("#confirmPassword").value) {
       $("#formMessage").textContent = "Passwords must match.";
       return;
