@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tools | Creative Vision</title>
+    <link rel="stylesheet" href="resource.css" />
+    <style>
+      [hidden] {
+        display: none !important;
+      }
+      .tool-picker {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin: 48px 0 24px;
+      }
+      .tool-option {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-height: 86px;
+        padding: 18px;
+        border: 1px solid var(--l);
+        background: var(--p);
+        cursor: pointer;
+      }
+      .tool-option:hover {
+        border-color: var(--c);
+      }
+      .tool-option input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .tool-check {
+        flex: 0 0 24px;
+        width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--l);
+        background: #0a0e10;
+        color: var(--b);
+        font-size: 15px;
+        font-weight: 800;
+      }
+      .tool-option input:checked + .tool-check {
+        border-color: var(--a);
+        background: var(--a);
+      }
+      .tool-option input:focus-visible + .tool-check {
+        outline: 2px solid var(--c);
+        outline-offset: 3px;
+      }
+      .tool-option strong {
+        display: block;
+        font-size: 17px;
+      }
+      .tool-option small {
+        display: block;
+        margin-top: 4px;
+        color: var(--m);
+      }
+      .tool-stage {
+        display: grid;
+        gap: 12px;
+      }
+      .tool-stage.split {
+        grid-template-columns: 1fr 1fr;
+      }
+      .tool-panel {
+        min-width: 0;
+        border: 1px solid var(--l);
+        border-top: 3px solid var(--c);
+        padding: 28px;
+        background: var(--p);
+      }
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+      .panel-index {
+        color: var(--c);
+        font: 12px monospace;
+      }
+      .panel-head h2 {
+        margin: 0;
+        font-size: clamp(24px, 4vw, 34px);
+        line-height: 1;
+        text-transform: uppercase;
+      }
+      .card-deck {
+        position: relative;
+        height: 210px;
+        margin-bottom: 22px;
+        perspective: 900px;
+      }
+      .deck-stack {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 220px;
+        height: 132px;
+        transform: translate(-50%, -50%);
+      }
+      .deck-stack i {
+        position: absolute;
+        inset: 0;
+        display: block;
+        border: 1px solid var(--l);
+        border-radius: 8px;
+        background: #101719;
+      }
+      .deck-stack i:nth-child(1) {
+        transform: translate(-10px, -10px);
+      }
+      .deck-stack i:nth-child(2) {
+        transform: translate(-5px, -5px);
+      }
+      .deck-stack i:nth-child(3) {
+        transform: translate(0, 0);
+      }
+      .card-face {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 220px;
+        height: 132px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border: 1px solid var(--a);
+        border-radius: 8px;
+        background: #0d1315;
+        color: var(--t);
+        text-align: center;
+        font-size: 21px;
+        font-weight: 700;
+        transform: translate(-50%, -50%);
+        transition: color 140ms ease;
+      }
+      .card-face.error {
+        color: #ff735c;
+        font-size: 16px;
+      }
+      .card-deck.is-shuffling .card-face {
+        color: var(--a);
+      }
+      textarea {
+        width: 100%;
+        min-height: 118px;
+        resize: vertical;
+        padding: 12px;
+        border: 1px solid var(--l);
+        background: #0a0e10;
+        color: var(--t);
+        font: 14px/1.5 system-ui;
+      }
+      textarea:focus {
+        border-color: var(--c);
+        outline: none;
+      }
+      .field-label {
+        display: block;
+        margin: 0 0 8px;
+        color: var(--m);
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+      .tool-action {
+        width: 100%;
+        margin-top: 16px;
+        border: 0;
+        font: 800 15px system-ui;
+        cursor: pointer;
+      }
+      .tool-action:disabled {
+        cursor: wait;
+        opacity: 0.7;
+      }
+      .dice-result {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 210px;
+        margin: 0;
+        color: var(--a);
+        font-size: clamp(88px, 16vw, 148px);
+        font-weight: 800;
+        line-height: 1;
+      }
+      .dice-result.rolling {
+        color: var(--c);
+      }
+      .placeholder-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 210px;
+        padding: 28px;
+        border: 1px dashed var(--l);
+        color: var(--m);
+        text-align: center;
+      }
+      .score-controls {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 20px;
+      }
+      .score-controls label {
+        display: block;
+        margin: 0 0 8px;
+        color: var(--m);
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+      .score-hint {
+        color: var(--m);
+        font-size: 12px;
+        text-align: right;
+      }
+      .score-select {
+        width: 120px;
+        height: 44px;
+        padding: 0 10px;
+        border: 1px solid var(--l);
+        background: #0a0e10;
+        color: var(--t);
+        font: 15px system-ui;
+      }
+      .score-select:focus {
+        border-color: var(--c);
+        outline: none;
+      }
+      .score-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .player-card {
+        min-width: 0;
+        padding: 16px;
+        border: 1px solid var(--l);
+        background: #0a0e10;
+      }
+      .player-label {
+        display: block;
+        color: var(--m);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .score-value {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 86px;
+        padding: 8px 4px;
+        color: var(--a);
+        font-size: clamp(46px, 9vw, 68px);
+        font-weight: 800;
+        line-height: 1;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .score-value[data-size="4"] {
+        font-size: 48px;
+      }
+      .score-value[data-size="5"] {
+        font-size: 38px;
+      }
+      .score-value[data-size="6"] {
+        font-size: 31px;
+      }
+      .score-value[data-size="7"] {
+        font-size: 27px;
+      }
+      .score-entry {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 58px;
+        gap: 6px;
+        margin-top: 14px;
+      }
+      .operation-input {
+        min-width: 0;
+        width: 100%;
+        height: 42px;
+        padding: 0 10px;
+        border: 1px solid var(--l);
+        background: #111719;
+        color: var(--t);
+        font: 14px/1 system-ui;
+      }
+      .operation-input:focus {
+        border-color: var(--c);
+        outline: none;
+      }
+      .operation-input.invalid {
+        border-color: #ff735c;
+      }
+      .score-apply {
+        height: 42px;
+        border: 1px solid var(--a);
+        background: var(--a);
+        color: var(--b);
+        font: 800 13px system-ui;
+        cursor: pointer;
+      }
+      .score-apply:hover {
+        background: #d8ff73;
+      }
+      .score-error {
+        min-height: 0;
+        margin-top: 8px;
+        color: #ff735c;
+        font-size: 12px;
+      }
+      @media (max-width: 780px) {
+        .tool-picker {
+          grid-template-columns: 1fr;
+        }
+        .tool-stage.split {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 430px) {
+        .score-entry {
+          grid-template-columns: 1fr;
+        }
+        .score-apply {
+          height: 38px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="homebar">
+      <div class="wrap homebar-inner">
+        <a class="brand" href="index.html">CREATIVE VISION</a>
+        <nav class="home-links">
+          <a href="index.html">Home</a><a href="dashboard.html">Dashboard</a
+          ><a href="resource.html" aria-current="page">Resources</a
+          ><a href="gallery.html">Gallery</a><a href="aboutus.html">About Us</a>
+        </nav>
+      </div>
+    </header>
+    <div class="page-label">
+      <div class="wrap page-label-inner">
+        <span>BIHZ / STUDIO TOOLS / MEMBER ACCESS</span>
+      </div>
+    </div>
+    <main class="wrap">
+      <small>02 / CLASSROOM TOOLS</small>
+      <h1>Tools</h1>
+      <p class="intro">
+        Pick the tools you need. Select more than one to arrange them side by
+        side.
+      </p>
+
+      <section class="tool-picker" aria-label="Select tools">
+        <label class="tool-option">
+          <input type="checkbox" value="card" />
+          <span class="tool-check">✓</span>
+          <span><strong>Card drawer</strong><small>Random card draw</small></span>
+        </label>
+        <label class="tool-option">
+          <input type="checkbox" value="score" />
+          <span class="tool-check">✓</span>
+          <span><strong>Score keeper</strong><small>Multiplayer scoring</small></span>
+        </label>
+        <label class="tool-option">
+          <input type="checkbox" value="dice" />
+          <span class="tool-check">✓</span>
+          <span><strong>Dice roller</strong><small>1 to 6</small></span>
+        </label>
+      </section>
+
+      <section class="tool-stage" id="toolStage" aria-live="polite">
+        <article class="tool-panel" data-tool="card" hidden>
+          <div class="panel-head">
+            <span class="panel-index">01 / CARD DRAWER</span>
+            <h2>Card drawer</h2>
+          </div>
+          <div class="card-deck" id="cardDeck">
+            <div class="deck-stack" aria-hidden="true">
+              <i></i><i></i><i></i>
+            </div>
+            <div class="card-face" id="cardFace">Draw a card</div>
+          </div>
+          <label class="field-label" for="cardContents">Card contents</label>
+          <textarea id="cardContents" placeholder="Put one card per line. For example:&#10;Sword&#10;Shield&#10;Potion&#10;Trap"></textarea>
+          <button class="button tool-action" id="drawCard" type="button">Shuffle &amp; draw</button>
+        </article>
+
+        <article class="tool-panel" data-tool="score" hidden>
+          <div class="panel-head">
+            <span class="panel-index">02 / SCORE KEEPER</span>
+            <h2>Score keeper</h2>
+          </div>
+          <div class="score-controls">
+            <div>
+              <label for="playerCount">Number of players</label>
+              <select class="score-select" id="playerCount">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+              </select>
+            </div>
+            <small class="score-hint">Enter +10, -5, *2, or /3</small>
+          </div>
+          <div class="score-grid" id="scoreGrid"></div>
+        </article>
+
+        <article class="tool-panel" data-tool="dice" hidden>
+          <div class="panel-head">
+            <span class="panel-index">03 / DICE ROLLER</span>
+            <h2>Dice roller</h2>
+          </div>
+          <div class="dice-result" id="diceResult">1</div>
+          <button class="button tool-action" id="rollDice" type="button">Roll dice</button>
+        </article>
+      </section>
+    </main>
+    <script>
+      const toolCheckboxes = document.querySelectorAll(".tool-option input");
+      const toolPanels = document.querySelectorAll(".tool-panel");
+      const toolStage = document.querySelector("#toolStage");
+      const cardDeck = document.querySelector("#cardDeck");
+      const cardFace = document.querySelector("#cardFace");
+      const cardContents = document.querySelector("#cardContents");
+      const drawButton = document.querySelector("#drawCard");
+      const diceResult = document.querySelector("#diceResult");
+      const rollButton = document.querySelector("#rollDice");
+      const playerCount = document.querySelector("#playerCount");
+      const scoreGrid = document.querySelector("#scoreGrid");
+      let cardTimer = null;
+      let diceTimer = null;
+      const playerScores = new Array(8).fill(0);
+
+      function syncToolLayout() {
+        toolCheckboxes.forEach((checkbox) => {
+          const panel = document.querySelector(
+            `.tool-panel[data-tool="${checkbox.value}"]`,
+          );
+          panel.hidden = !checkbox.checked;
+        });
+
+        const visiblePanels = [...toolPanels].filter((panel) => !panel.hidden);
+        visiblePanels.forEach((panel) => {
+          panel.style.gridColumn = "";
+        });
+        toolStage.classList.toggle("split", visiblePanels.length > 1);
+        if (visiblePanels.length > 1 && visiblePanels.length % 2 === 1) {
+          visiblePanels[visiblePanels.length - 1].style.gridColumn = "1 / -1";
+        }
+      }
+
+      function getCardItems() {
+        return cardContents.value
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean);
+      }
+
+      function drawCard() {
+        clearInterval(cardTimer);
+        cardFace.classList.remove("error");
+        const items = getCardItems();
+        if (!items.length) {
+          cardFace.textContent = "Add at least one card first";
+          cardFace.classList.add("error");
+          return;
+        }
+
+        let ticks = 0;
+        const totalTicks = 14 + Math.floor(Math.random() * 6);
+        cardDeck.classList.add("is-shuffling");
+        cardTimer = setInterval(() => {
+          cardFace.textContent = items[Math.floor(Math.random() * items.length)];
+          ticks += 1;
+          if (ticks >= totalTicks) {
+            clearInterval(cardTimer);
+            cardDeck.classList.remove("is-shuffling");
+          }
+        }, 65);
+      }
+
+      function rollDice() {
+        clearInterval(diceTimer);
+        let ticks = 0;
+        const totalTicks = 12;
+        rollButton.disabled = true;
+        diceResult.classList.add("rolling");
+        diceTimer = setInterval(() => {
+          diceResult.textContent = Math.floor(Math.random() * 6) + 1;
+          ticks += 1;
+          if (ticks >= totalTicks) {
+            clearInterval(diceTimer);
+            rollButton.disabled = false;
+            diceResult.classList.remove("rolling");
+          }
+        }, 75);
+      }
+
+      function formatScore(value) {
+        const rounded = Math.round(value * 100) / 100;
+        return String(Object.is(rounded, -0) ? 0 : rounded);
+      }
+
+      function sizeScoreValue(valueElement, value) {
+        const text = formatScore(value);
+        valueElement.textContent = text;
+        if (text.length >= 4) {
+          valueElement.dataset.size = String(Math.min(text.length, 7));
+        } else {
+          delete valueElement.dataset.size;
+        }
+      }
+
+      function applyScoreOperation(playerIndex, card) {
+        const input = card.querySelector(".operation-input");
+        const error = card.querySelector(".score-error");
+        const rawValue = input.value.trim();
+        const match = rawValue.match(/^([+\-*/])\s*(-?\d{1,4})$/);
+
+        if (!match) {
+          error.textContent = "Use +, -, *, or / followed by a number.";
+          error.hidden = false;
+          input.classList.add("invalid");
+          return;
+        }
+
+        const operator = match[1];
+        const amount = Number(match[2]);
+        if (operator === "/" && amount === 0) {
+          error.textContent = "Cannot divide by zero.";
+          error.hidden = false;
+          input.classList.add("invalid");
+          return;
+        }
+
+        let score = playerScores[playerIndex];
+        if (operator === "+") score += amount;
+        if (operator === "-") score -= amount;
+        if (operator === "*") score *= amount;
+        if (operator === "/") score /= amount;
+        playerScores[playerIndex] = score;
+
+        sizeScoreValue(card.querySelector(".score-value"), score);
+        input.value = "";
+        input.classList.remove("invalid");
+        error.hidden = true;
+      }
+
+      function renderScorePlayers() {
+        const count = Number(playerCount.value);
+        scoreGrid.innerHTML = "";
+
+        for (let index = 0; index < count; index += 1) {
+          const card = document.createElement("div");
+          card.className = "player-card";
+          card.innerHTML = `
+            <span class="player-label">Player ${index + 1}</span>
+            <div class="score-value">0</div>
+            <div class="score-entry">
+              <input class="operation-input" type="text" maxlength="6" placeholder="+10" aria-label="Operation for Player ${index + 1}" title="Use +, -, *, or / followed by a number" />
+              <button class="score-apply" type="button">Apply</button>
+            </div>
+            <div class="score-error" hidden></div>
+          `;
+          const applyScore = () => applyScoreOperation(index, card);
+          const input = card.querySelector(".operation-input");
+          card.querySelector(".score-apply").addEventListener("click", applyScore);
+          input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              applyScore();
+            }
+          });
+          sizeScoreValue(card.querySelector(".score-value"), playerScores[index]);
+          scoreGrid.appendChild(card);
+        }
+      }
+
+      toolCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", syncToolLayout);
+      });
+      drawButton.addEventListener("click", drawCard);
+      rollButton.addEventListener("click", rollDice);
+      playerCount.addEventListener("change", renderScorePlayers);
+      renderScorePlayers();
+      syncToolLayout();
+    </script>
+  </body>
+</html>

@@ -61,10 +61,19 @@ async function renderResources() {
     },
   ];
   document.querySelector("#resourceList").innerHTML = sections
-    .map(
-      (section, index) =>
-        `<article class="resource-section"><button class="resource-toggle" aria-expanded="false"><span class="section-index">0${index + 1}</span><span><strong>${section.title}</strong><small>${section.description}</small></span><b>+</b></button><div class="resource-detail" hidden>${section.items.map((item) => { const available = section.type === "video"; return `<div class="lesson-row"><div><span class="tag">${item.lesson}</span><strong>${item.objective}</strong></div><div><span>${item.title}</span>${available ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a>` : '<span class="unavailable">Not yet available</span>'}</div></div>`; }).join("")}</div></article>`,
-    )
+    .map((section, index) => {
+      const itemRows = section.items
+        .map((item) => {
+          const available = section.type === "video";
+          return `<div class="lesson-row"><div><span class="tag">${item.lesson}</span><strong>${item.objective}</strong></div><div><span>${item.title}</span>${available ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a>` : '<span class="unavailable">Not yet available</span>'}</div></div>`;
+        })
+        .join("");
+      const toolsRow =
+        section.type === "reference"
+          ? '<div class="lesson-row"><div><span class="tag">TOOLS</span><strong>Classroom tools</strong></div><div><span>Card drawer, score keeper, and dice roller</span><a href="tools.html">Open tools ↗</a></div></div>'
+          : "";
+      return `<article class="resource-section"><button class="resource-toggle" aria-expanded="false"><span class="section-index">0${index + 1}</span><span><strong>${section.title}</strong><small>${section.description}</small></span><b>+</b></button><div class="resource-detail" hidden>${itemRows}${toolsRow}</div></article>`;
+    })
     .join("");
   document.querySelectorAll(".resource-toggle").forEach((toggle) =>
     toggle.addEventListener("click", () => {

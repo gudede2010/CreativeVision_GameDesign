@@ -39,6 +39,14 @@ $("#registerToggle").onclick = () => {
   $("#confirmPassword").required = registrationMode;
   $("#formMessage").textContent = "";
 };
+const closeRegistrationModal = () => {
+  $("#registrationModal").hidden = true;
+  $("#registerToggle").click();
+};
+$("#registrationModalClose").onclick = closeRegistrationModal;
+$("#registrationModal").onclick = (event) => {
+  if (event.target === $("#registrationModal")) closeRegistrationModal();
+};
 $("#loginForm").onsubmit = async (event) => {
   event.preventDefault();
   await supabaseReady;
@@ -55,8 +63,8 @@ $("#loginForm").onsubmit = async (event) => {
     }
     const { error } = await supabaseClient.auth.signUp({ email, password });
     if (error) { $("#formMessage").textContent = error.message; return; }
-    $("#formMessage").textContent = "Account created. You can now sign in.";
-    $("#registerToggle").click();
+    $("#formMessage").textContent = "";
+    $("#registrationModal").hidden = false;
     return;
   }
   const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
